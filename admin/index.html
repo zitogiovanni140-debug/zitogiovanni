@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin | Giovanni Zito</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Manrope:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070708;--fg:#f3f2ef;--mut:#a9a7a2;--dim:#6b6a67;--ac:#a78bfa;--ac2:#c4b5fd;--acd:rgba(167,139,250,.14);--bd:#232325;--card:#0d0d0f;--err:#f87171;--ok:#4ade80}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font:300 15px/1.6 Manrope,system-ui,sans-serif;min-height:100vh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(600px 400px at 85% -5%,rgba(110,80,220,.28),transparent);pointer-events:none}
+.w{position:relative;max-width:900px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Playfair Display",serif;font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.eyebrow{color:var(--ac);font:500 11px "JetBrains Mono";letter-spacing:.25em;text-transform:uppercase}
+.btn{display:inline-block;font:600 14px Manrope;color:var(--ac);background:var(--acd);border:1px solid rgba(167,139,250,.4);border-radius:11px;padding:10px 18px;cursor:pointer;transition:.25s;text-decoration:none}
+.btn:hover{background:var(--ac);color:#0b0714}
+.btn.ghost{background:none;color:var(--fg);border-color:#3a3a3d}.btn.ghost:hover{border-color:var(--ac);color:var(--ac);background:none}
+.btn.danger{color:var(--err);border-color:rgba(248,113,113,.4);background:none}.btn.danger:hover{background:var(--err);color:#150505}
+.btn.sm{padding:6px 12px;font-size:12.5px}.btn:disabled{opacity:.5;pointer-events:none}
+label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);display:grid;gap:6px}
+input,select,textarea{font:400 15px Manrope;color:var(--fg);background:#121214;border:1px solid var(--bd);border-radius:11px;padding:11px 13px;width:100%;text-transform:none;letter-spacing:0}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
+textarea{min-height:80px;resize:vertical}
+input[type=file]{padding:9px}
+.box{border:1px solid var(--bd);border-radius:18px;background:var(--card);padding:22px}
+.form{display:grid;gap:14px}
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+#login .box{width:100%;max-width:400px}
+#login h1{font-size:34px;margin:10px 0 18px}
+.err{color:var(--err);font-size:13px;min-height:20px}
+#app{display:none;padding:26px 0 80px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:30px;margin-right:auto}
+.tabs{display:flex;gap:6px;margin-bottom:20px;border-bottom:1px solid var(--bd);padding-bottom:12px}
+.tab{padding:8px 16px;border-radius:99px;border:0;background:none;color:var(--mut);font:600 14px Manrope;cursor:pointer}
+.tab.on{background:var(--acd);color:#fff}
+.tab small{margin-left:6px;color:var(--ac);font-family:"JetBrains Mono";font-size:11px}
+.tool{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}.tool input{flex:1;min-width:180px}
+.list{display:grid;gap:12px}
+.item{border:1px solid var(--bd);border-radius:16px;background:var(--card);padding:18px 20px}
+.item.new{border-color:rgba(167,139,250,.5)}
+.row{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.row .grow{flex:1;min-width:200px}
+.item h3{font:700 18px "Playfair Display"}
+.meta{color:var(--dim);font:400 12px "JetBrains Mono"}
+.tag{display:inline-block;padding:2px 10px;border:1px solid rgba(167,139,250,.35);border-radius:99px;color:var(--ac);font:500 10px "JetBrains Mono";letter-spacing:.15em;text-transform:uppercase}
+.msg{margin:10px 0 14px;color:#dcdad5;white-space:pre-wrap;word-break:break-word}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.empty{color:var(--dim);text-align:center;padding:40px 0}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ac);color:#0b0714;font-weight:600;padding:10px 18px;border-radius:99px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translate(-50%,0)}.toast.bad{background:var(--err)}
+.hint{color:var(--dim);font-size:12.5px}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <form class="box form" id="lf" autocomplete="on">
+    <div><div class="eyebrow">// Area riservata</div><h1>Accedi</h1></div>
+    <label>Email<input type="email" id="em" autocomplete="username" required></label>
+    <label>Password<input type="password" id="pw" autocomplete="current-password" required></label>
+    <div class="err" id="le"></div>
+    <button class="btn" type="submit" id="lb">Entra</button>
+  </form>
+</div>
+
+<div id="app"><div class="w">
+  <div class="top">
+    <h1>Pannello admin</h1>
+    <a class="btn ghost sm" href="/" target="_blank" rel="noopener">Vedi il sito ↗</a>
+    <button class="btn ghost sm" id="lo">Esci</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-t="req">Richieste<small id="cr">0</small></button>
+    <button class="tab" data-t="gd">Guide gratuite<small id="cg">0</small></button>
+  </div>
+
+  <section id="req">
+    <div class="tool">
+      <input id="q" placeholder="Cerca per nome, email o messaggio…">
+      <button class="btn ghost sm" id="rf">Aggiorna</button>
+    </div>
+    <div class="list" id="rl"></div>
+  </section>
+
+  <section id="gd" hidden>
+    <form class="box form" id="gf">
+      <div class="eyebrow">// Aggiungi una guida</div>
+      <label>Titolo<input name="title" maxlength="120" required placeholder="Es. Come creare il tuo primo sito"></label>
+      <label>Descrizione breve<textarea name="description" maxlength="400" placeholder="Di cosa parla la guida (opzionale)"></textarea></label>
+      <label>Etichetta<input name="tag" maxlength="30" value="Guida" placeholder="Es. AI, Marketing, Siti web"></label>
+      <label>File (PDF, MD, DOCX, ZIP, immagini… max 5 MB)<input type="file" name="file" required></label>
+      <div class="err" id="ge"></div>
+      <button class="btn" type="submit" id="gb">Carica guida</button>
+      <p class="hint">Appena caricata, la guida compare nella pagina “Guide gratuite” del sito.</p>
+    </form>
+    <h2 style="font-size:24px;margin:30px 0 14px">Guide caricate</h2>
+    <div class="list" id="gl"></div>
+  </section>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const KEY="adm_token", SEEN="adm_seen";
+let token=sessionStorage.getItem(KEY)||"", reqs=[], seen=new Set(JSON.parse(localStorage.getItem(SEEN)||"[]"));
+
+function toast(t,bad){const e=$("toast");e.textContent=t;e.className="toast on"+(bad?" bad":"");setTimeout(()=>e.className="toast",2400)}
+async function api(path,opt={}){
+  const r=await fetch(path,{...opt,headers:{...(opt.headers||{}),Authorization:"Bearer "+token}});
+  let d={};try{d=await r.json()}catch{}
+  if(r.status===401&&path!=="/api/login"){logout();throw new Error("Sessione scaduta")}
+  if(!r.ok)throw new Error(d.error||"Errore "+r.status);
+  return d;
+}
+function show(){const on=!!token;$("login").style.display=on?"none":"grid";$("app").style.display=on?"block":"none";if(on){loadReq();loadGuides()}}
+function logout(){token="";sessionStorage.removeItem(KEY);show()}
+$("lo").onclick=logout;
+
+$("lf").onsubmit=async e=>{
+  e.preventDefault();$("le").textContent="";$("lb").disabled=true;
+  try{
+    const r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:$("em").value,password:$("pw").value})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.error||"Errore di accesso");
+    token=d.token;sessionStorage.setItem(KEY,token);$("pw").value="";show();
+  }catch(err){$("le").textContent=err.message}
+  $("lb").disabled=false;
+};
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));
+  $("req").hidden=b.dataset.t!=="req";$("gd").hidden=b.dataset.t!=="gd";
+});
+
+/* ===== Richieste ===== */
+const fmtDate=d=>new Date(d).toLocaleString("it-IT",{dateStyle:"medium",timeStyle:"short"});
+function renderReq(){
+  const q=$("q").value.trim().toLowerCase();
+  const list=reqs.filter(r=>!q||[r.nome,r.email,r.messaggio,r.servizio].join(" ").toLowerCase().includes(q));
+  $("cr").textContent=reqs.filter(r=>!seen.has(r.id)).length||reqs.length;
+  $("rl").innerHTML=list.length?list.map(r=>`
+    <div class="item ${seen.has(r.id)?"":"new"}" data-id="${esc(r.id)}">
+      <div class="row"><div class="grow"><h3>${esc(r.nome)||"Senza nome"}</h3>
+        <div class="meta">${esc(r.email)} · ${esc(fmtDate(r.date))}</div></div>
+        <span class="tag">${esc(r.servizio)}</span></div>
+      <div class="msg">${esc(r.messaggio)}</div>
+      <div class="acts">
+        <a class="btn sm" href="mailto:${encodeURIComponent(r.email)}?subject=${encodeURIComponent("Re: la tua richiesta")}">Rispondi via email</a>
+        <button class="btn ghost sm" data-a="seen">${seen.has(r.id)?"Segna da leggere":"Segna come letta"}</button>
+        <button class="btn danger sm" data-a="del">Elimina</button>
+      </div>
+    </div>`).join(""):`<div class="empty">${reqs.length?"Nessun risultato.":"Nessuna richiesta ricevuta per ora."}</div>`;
+}
+async function loadReq(){
+  $("rl").innerHTML='<div class="empty">Caricamento…</div>';
+  try{reqs=(await api("/api/submissions")).items;renderReq()}
+  catch(e){$("rl").innerHTML=`<div class="empty" style="color:var(--err)">${esc(e.message)}</div>`}
+}
+$("rf").onclick=loadReq;$("q").oninput=renderReq;
+$("rl").onclick=async e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;
+  const id=b.closest(".item").dataset.id;
+  if(b.dataset.a==="seen"){seen.has(id)?seen.delete(id):seen.add(id);localStorage.setItem(SEEN,JSON.stringify([...seen]));renderReq()}
+  if(b.dataset.a==="del"){
+    if(!confirm("Eliminare definitivamente questa richiesta?"))return;
+    try{await api("/api/submissions?id="+encodeURIComponent(id),{method:"DELETE"});reqs=reqs.filter(r=>r.id!==id);renderReq();toast("Richiesta eliminata")}
+    catch(err){toast(err.message,1)}
+  }
+};
+
+/* ===== Guide ===== */
+let guides=[];
+const fmtSize=n=>n>1048576?(n/1048576).toFixed(1)+" MB":Math.max(1,Math.round(n/1024))+" KB";
+function renderGuides(){
+  $("cg").textContent=guides.length;
+  $("gl").innerHTML=guides.length?guides.map(g=>`
+    <div class="item" data-id="${esc(g.id)}">
+      <div class="row"><div class="grow"><span class="tag">${esc(g.tag)}</span>
+        <h3 style="margin-top:8px">${esc(g.title)}</h3>
+        <div class="meta">${esc(g.filename)} · ${fmtSize(g.size)} · ${esc(fmtDate(g.date))}</div></div></div>
+      ${g.description?`<div class="msg">${esc(g.description)}</div>`:""}
+      <div class="acts" style="margin-top:10px">
+        <a class="btn sm" href="/api/guide-file?id=${encodeURIComponent(g.id)}" target="_blank" rel="noopener">Apri</a>
+        <button class="btn ghost sm" data-a="copy">Copia link</button>
+        <button class="btn danger sm" data-a="del">Elimina</button>
+      </div>
+    </div>`).join(""):'<div class="empty">Nessuna guida caricata.</div>';
+}
+async function loadGuides(){
+  try{guides=(await (await fetch("/api/guides")).json()).items||[];renderGuides()}catch{}
+}
+$("gf").onsubmit=async e=>{
+  e.preventDefault();$("ge").textContent="";$("gb").disabled=true;$("gb").textContent="Caricamento…";
+  try{
+    await api("/api/admin-guides",{method:"POST",body:new FormData(e.target)});
+    e.target.reset();e.target.tag.value="Guida";await loadGuides();toast("Guida pubblicata");
+  }catch(err){$("ge").textContent=err.message}
+  $("gb").disabled=false;$("gb").textContent="Carica guida";
+};
+$("gl").onclick=async e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;
+  const id=b.closest(".item").dataset.id;
+  if(b.dataset.a==="copy"){
+    const url=location.origin+"/api/guide-file?id="+id;
+    try{await navigator.clipboard.writeText(url);toast("Link copiato")}catch{prompt("Copia il link:",url)}
+  }
+  if(b.dataset.a==="del"){
+    if(!confirm("Eliminare questa guida dal sito?"))return;
+    try{await api("/api/admin-guides?id="+encodeURIComponent(id),{method:"DELETE"});await loadGuides();toast("Guida eliminata")}
+    catch(err){toast(err.message,1)}
+  }
+};
+
+show();
+</script>
+</body>
+</html>
