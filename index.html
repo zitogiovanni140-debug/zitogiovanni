@@ -440,6 +440,7 @@ Se un test non passa, dimmi se l'errore è nel test o nel codice prima di correg
     <label>Messaggio<textarea name="messaggio" required></textarea></label>
     <label class="chk"><input type="checkbox" name="privacy" required><span>Acconsento al trattamento dei dati inseriti per ricevere una risposta alla mia richiesta.</span></label>
     <button class="btn big" type="submit" id="sb">Invia richiesta</button>
+    <p id="form-error" role="alert" aria-live="polite" style="display:none;color:#ff9292;font-size:13px">Invio non riuscito. Riprova tra poco.</p>
   </form>
   <div class="ok" id="ok"><b>Messaggio inviato</b>Grazie, ti rispondo il prima possibile.</div>
   <div class="cta" style="margin-top:30px"><a class="btn" href="https://instagram.com/zitogiovanni.it" target="_blank" rel="noopener">Instagram ↗</a><a class="btn" href="https://linktr.ee/zitogiovanni.it" target="_blank" rel="noopener">Linktree ↗</a></div>
@@ -472,9 +473,20 @@ let tk=0;async function type(){const my=++tk,el=$('tw');el.innerHTML='';
 let fol=31,views=4300;const fmt=n=>n.toLocaleString('it-IT'),fl=el=>{el.classList.add('up');setTimeout(()=>el.classList.remove('up'),900)};
 setInterval(()=>{views+=1+Math.floor(Math.random()*6);$('n-views').textContent=fmt(views)},1800);
 setInterval(()=>{if(Math.random()<.5){fol++;$('n-fol').textContent=fol;fl($('n-fol'));const t=$('toast');t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}},7000);
-$('f').addEventListener('submit',async e=>{e.preventDefault();const f=e.target,b=$('sb');b.textContent='Invio…';
-  try{const r=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()});if(!r.ok)throw 0;f.style.display='none';$('ok').style.display='block'}
-  catch(_){b.textContent='Non inviato: scrivimi su Instagram';b.onclick=()=>window.open('https://instagram.com/zitogiovanni.it','_blank');setTimeout(()=>b.textContent='Invia richiesta',4000)}});
+$('f').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target,b=$('sb'),error=$('form-error');
+  b.disabled=true;b.textContent='Invio in corso…';error.style.display='none';
+  try{
+    const body=new URLSearchParams(new FormData(f)).toString();
+    const r=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
+    if(!r.ok)throw new Error('Invio non riuscito');
+    f.style.display='none';$('ok').style.display='block';
+  }catch(_){
+    error.textContent='Impossibile inviare il messaggio in questo momento. Riprova tra poco.';
+    error.style.display='block';
+  }finally{b.disabled=false;b.textContent='Invia richiesta';}
+});
 
 setTimeout(()=>$('splash').classList.add('hide'),1100);setTimeout(()=>$('splash').remove(),1900);
 const up=$('up');addEventListener('scroll',()=>up.classList.toggle('on',scrollY>600),{passive:true});up.onclick=()=>scrollTo({top:0,behavior:'smooth'});
